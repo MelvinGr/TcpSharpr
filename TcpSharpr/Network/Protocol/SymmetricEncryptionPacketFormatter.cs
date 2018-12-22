@@ -43,14 +43,7 @@ namespace TcpSharpr.Network.Protocol {
 
         public override byte[] PreparePacketForNetwork(byte[] buffer) {
             buffer = ApplyTransformation(buffer, _encryptTransform);
-   
-            int packetLength = buffer.Length;
-
-            List<byte> packet = new List<byte>();
-            packet.AddRange(BitConverter.GetBytes(packetLength));
-            packet.AddRange(buffer);
-
-            return packet.ToArray();
+            return base.PreparePacketForNetwork(buffer);
         }
 
         private byte[] ApplyTransformation(byte[] input, ICryptoTransform transform) {
