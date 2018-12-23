@@ -36,16 +36,21 @@ namespace TcpSharpr.Network {
             _socket = socket;
             _parentStopTokenSource = stopTokenSource;
             _internalStopTokenSource = new CancellationTokenSource();
-            
-            if (encryptionAlgorithm == null) {
-                _packetFormatter = new PacketFormatter();
-            } else {
-                _packetFormatter = new SymmetricEncryptionPacketFormatter(encryptionAlgorithm);
-            }
 
+            SetSymmetricAlgorithm(encryptionAlgorithm);
+            
             _commandManager = commandManager;
             _messageManager = new MessageManager(_commandManager, this);
             _messageSerializer = new BinaryFormatterSerializer();
+        }
+               
+        public void SetSymmetricAlgorithm(SymmetricAlgorithm encryptionAlgorithm) {
+            if (encryptionAlgorithm == null) {
+                _packetFormatter = new PacketFormatter();
+            }
+            else {
+                _packetFormatter = new SymmetricEncryptionPacketFormatter(encryptionAlgorithm);
+            }
         }
 
         internal void RunsAt(Server server) {
